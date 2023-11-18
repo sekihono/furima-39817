@@ -42,11 +42,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_14_110752) do
   create_table "items", charset: "utf8", force: :cascade do |t|
     t.string "product_name", null: false
     t.text "description", null: false
-    t.string "category_id", null: false
-    t.string "product_status_id", null: false
-    t.string "shipping_cost_burden_id", null: false
-    t.string "origin_region_id", null: false
-    t.string "delivery_time_id", null: false
+    t.integer "category_id", null: false
+    t.integer "product_status_id", null: false
+    t.integer "shipping_cost_burden_id", null: false
+    t.integer "origin_region_id", null: false
+    t.integer "delivery_time_id", null: false
     t.integer "price", null: false
     t.bigint "user_id", null: false
     t.datetime "created_at", null: false
