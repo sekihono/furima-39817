@@ -2,17 +2,15 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new]
 
   def index
-    # binding.pry
-    #@items = Item.all
+    @items = Item.all.order(created_at: :desc)
+    #binding.pry
   end
   def new
     @item = Item.new
   end
 
   def create
-    #binding.pry
     @item = Item.new(item_params)
-    # binding.pry
     if @item.save
       redirect_to root_path
     else
@@ -20,7 +18,6 @@ class ItemsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
-
 
   private
 
