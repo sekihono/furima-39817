@@ -2,7 +2,7 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new]
 
   def index
-    @items = Item.all.order(created_at: :desc)
+    @items = Item.order(created_at: :desc)
     #binding.pry
   end
   def new
@@ -18,6 +18,14 @@ class ItemsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
+
+  def show
+    #binding.pry
+    @item = Item.find(params[:id])
+    #binding.pry
+  end
+
+
 
   private
 
