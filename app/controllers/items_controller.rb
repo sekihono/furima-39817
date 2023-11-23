@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new]
-  before_action :set_item, only: [:show, :edit, :update]
+  before_action :set_item, only: [:show, :edit, :update, :destroy]
 
   def index
     @items = Item.order(created_at: :desc)
@@ -39,7 +39,20 @@ class ItemsController < ApplicationController
     else
       render :edit,status: :unprocessable_entity
     end
-  end  
+  end
+  
+  def destroy
+    if !user_signed_in?
+      redirect_to new_user_session_path
+    elsif unless current_user == @item.user
+      # ユーザーが自身が出品した商品でない場合、トップページにリダイレクト
+          redirect_to root_path
+          end
+    else      
+      @item.destroy
+      redirect_to root_path
+    end
+  end
 
   def set_item
     @item = Item.find(params[:id])
