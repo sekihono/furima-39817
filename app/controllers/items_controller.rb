@@ -1,6 +1,7 @@
 class ItemsController < ApplicationController
-  before_action :authenticate_user!, only: [:new]
+  before_action :authenticate_user!, only: [:new, :edit, :destroy]
   before_action :set_item, only: [:show, :edit, :update, :destroy]
+  before_action :move_to_index, only: [:edit, :destroy]
 
   def index
     @items = Item.order(created_at: :desc)
@@ -24,13 +25,6 @@ class ItemsController < ApplicationController
   end
 
   def edit
-    if !user_signed_in?
-      redirect_to new_user_session_path
-    elsif unless current_user == @item.user
-      # ユーザーが自身が出品した商品でない場合、トップページにリダイレクト
-          redirect_to root_path
-          end
-    end
   end
   
   def update
@@ -42,20 +36,8 @@ class ItemsController < ApplicationController
   end
   
   def destroy
-    if !user_signed_in?
-      redirect_to new_user_session_path
-    elsif unless current_user == @item.user
-      # ユーザーが自身が出品した商品でない場合、トップページにリダイレクト
-          redirect_to root_path
-          end
-    else      
-      @item.destroy
-      redirect_to root_path
-    end
-  end
-
-  def set_item
-    @item = Item.find(params[:id])
+    @item.destroy
+    redirect_to root_path
   end
 
   private
@@ -63,4 +45,17 @@ class ItemsController < ApplicationController
   def item_params
     params.require(:item).permit(:product_name, :description, :price, :image, :category_id, :product_status_id, :shipping_cost_burden_id, :origin_region_id, :delivery_time_id).merge(user_id: current_user.id)
   end
+
+  def set_item
+    @item = Item.find(params[:id])
+  end
+
+  def move_to_index 
+  if current_user != @item.user
+    # ユーザーが自身が出品した商品でない場合、トップページにリダイレクト
+        redirect_to root_path
+  end
+  end
+
 end
+
