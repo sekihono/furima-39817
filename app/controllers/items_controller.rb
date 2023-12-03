@@ -3,6 +3,7 @@ class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy]
   before_action :move_to_index, only: [:edit, :destroy]
 
+
   def index
     @items = Item.order(created_at: :desc)
   end
@@ -13,7 +14,7 @@ class ItemsController < ApplicationController
 
   def create
     @item = Item.new(item_params)
-    if @item.save
+    if @item.save  
       redirect_to root_path
     else
       puts @item.errors.full_messages
@@ -51,10 +52,10 @@ class ItemsController < ApplicationController
   end
 
   def move_to_index 
-  if current_user != @item.user
-    # ユーザーが自身が出品した商品でない場合、トップページにリダイレクト
-        redirect_to root_path
-  end
+    if current_user != @item.user ||  @item.sold_out? 
+      # ユーザーが自身が出品した商品でない場合、または売却済みの場合、トップページにリダイレクト
+          redirect_to root_path
+    end
   end
 
 end

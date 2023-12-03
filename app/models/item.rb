@@ -7,9 +7,13 @@ class Item < ApplicationRecord
   belongs_to :delivery_time,class_name: 'DeliveryTime'
 
   belongs_to :user
-  #has_one :payment_profile,class_name: 'PaymentProfile'
 
   has_one_attached :image
+  has_one :payment_profile
+
+  def sold_out?
+    payment_profile.present? && !payment_profile.nil?
+  end
 
   validates :image, presence: true
   validates :product_name, presence: true
@@ -23,7 +27,6 @@ class Item < ApplicationRecord
   validates :price, presence: true, numericality: {only_integer: true, greater_than_or_equal_to: 0}
   validates :price, numericality: { greater_than_or_equal_to: 300, less_than_or_equal_to: 9_999_999 }
 
-  #ジャンルの選択が「---」の時は保存できないようにする
   validates :category_id      , numericality: { other_than: 1 , message: "can't be blank"}
   validates :product_status_id, numericality: { other_than: 1 , message: "can't be blank"}
   validates :shipping_cost_burden_id, numericality: { other_than: 1 , message: "can't be blank"}
