@@ -52,8 +52,8 @@ class ItemsController < ApplicationController
   end
 
   def move_to_index 
-    if (current_user != @item.user) || ( current_user == @item.user &&  @item.sold_out? )
-      # ユーザーが自身が出品した商品でない場合、またはユーザが出品した商品が売却済みの場合、トップページにリダイレクト
+    if current_user != @item.user ||  @item.sold_out? 
+      # ユーザーが自身が出品した商品でない場合、または売却済みの場合、トップページにリダイレクト
           redirect_to root_path
     end
   end

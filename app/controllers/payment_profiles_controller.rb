@@ -37,7 +37,7 @@ class PaymentProfilesController < ApplicationController
   end  
 
   def move_to_index 
-    if (current_user != @item.user && @item.sold_out?) ||  (current_user == @item.user)
+    if current_user != @item.user || @item.sold_out?
       # ユーザーが自身が出品した商品でない かつ　売却済み場合、トップページにリダイレクト
           redirect_to root_path
     end
