@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_14_110752) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_26_031223) do
   create_table "active_storage_attachments", charset: "utf8", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -63,6 +63,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_14_110752) do
     t.index ["user_id"], name: "index_payment_profiles_on_user_id"
   end
 
+  create_table "shippings", charset: "utf8", force: :cascade do |t|
+    t.string "postal_code", null: false
+    t.integer "origin_region_id", null: false
+    t.string "city", null: false
+    t.string "street_number", null: false
+    t.string "building_name"
+    t.integer "phone_number", null: false
+    t.bigint "payment_profile_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["payment_profile_id"], name: "index_shippings_on_payment_profile_id"
+  end
+
   create_table "users", charset: "utf8", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -86,4 +99,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_14_110752) do
   add_foreign_key "items", "users"
   add_foreign_key "payment_profiles", "items"
   add_foreign_key "payment_profiles", "users"
+  add_foreign_key "shippings", "payment_profiles"
 end

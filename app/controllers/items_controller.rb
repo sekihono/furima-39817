@@ -2,6 +2,7 @@ class ItemsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :edit, :destroy]
   before_action :set_item, only: [:show, :edit, :update, :destroy]
   before_action :move_to_index, only: [:edit, :destroy]
+  before_action :move_to_top, only: [:show]
 
   def index
     @items = Item.order(created_at: :desc)
@@ -13,7 +14,8 @@ class ItemsController < ApplicationController
 
   def create
     @item = Item.new(item_params)
-    if @item.save
+    binding.pry
+    if @item.save  
       redirect_to root_path
     else
       puts @item.errors.full_messages
@@ -51,10 +53,19 @@ class ItemsController < ApplicationController
   end
 
   def move_to_index 
-  if current_user != @item.user
-    # ユーザーが自身が出品した商品でない場合、トップページにリダイレクト
-        redirect_to root_path
+    if current_user != @item.user
+      # ユーザーが自身が出品した商品でない場合、トップページにリダイレクト
+          redirect_to root_path
+    end
   end
+
+  def move_to_top 
+    @item = Item.find(params[:id])
+    #binding.pry
+    if current_user == @item.user &&  @item.sold_out? 
+      # ユーザーが自身が出品した商品 かつ売却済みの商品の場合、トップページにリダイレクト
+          redirect_to root_path
+    end
   end
 
 end
