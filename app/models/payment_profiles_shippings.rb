@@ -7,7 +7,7 @@ class PaymentProfilesShippings
 
     validates :city
     validates :street_number
-    validates :phone_number, presence: true, numericality: { only_integer: true },length: { minimum: 10, maximum: 11 }
+    validates :phone_number, presence: true, numericality: { only_integer: true }, format: { with: /\A[0-9]{10,11}\z/ }
     validates :item_id
     validates :user_id
     validates :building_name, allow_blank: true

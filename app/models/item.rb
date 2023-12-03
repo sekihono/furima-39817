@@ -7,7 +7,6 @@ class Item < ApplicationRecord
   belongs_to :delivery_time,class_name: 'DeliveryTime'
 
   belongs_to :user
-  #has_one :payment_profile,class_name: 'PaymentProfile'
 
   has_one_attached :image
   has_one :payment_profile

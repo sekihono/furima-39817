@@ -1,18 +1,16 @@
 class PaymentProfilesController < ApplicationController
   before_action :authenticate_user!, only: [:index]
   before_action :move_to_index, only: [:index]
+  before_action :set_item, only: [:index, :create, :move_to_index]
 
 
   def index
     gon.public_key = ENV["PAYJP_PUBLIC_KEY"]
-    @item = Item.find(params[:item_id])
     @payment_profiles_shippings = PaymentProfilesShippings.new
   end
 
   def create
-    @item = Item.find(params[:item_id])
     @payment_profiles_shippings = PaymentProfilesShippings.new(payment_profiles_shippings_params)
-
     if @payment_profiles_shippings.valid?
        pay_item
        @payment_profiles_shippings.save
@@ -39,11 +37,14 @@ class PaymentProfilesController < ApplicationController
   end  
 
   def move_to_index 
-    @item = Item.find(params[:item_id])
     if (current_user != @item.user && @item.sold_out?) ||  (current_user == @item.user)
       # ユーザーが自身が出品した商品でない かつ　売却済み場合、トップページにリダイレクト
           redirect_to root_path
     end
+  end
+
+  def set_item
+    @item = Item.find(params[:item_id])
   end
 
 end

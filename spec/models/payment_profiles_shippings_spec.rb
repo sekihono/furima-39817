@@ -67,11 +67,45 @@ RSpec.describe PaymentProfilesShippings, type: :model do
         expect(@payment_profiles_shippings.errors.full_messages).to include("Phone number can't be blank")
       end
 
-      it '電話番号は10桁以上11桁以内の半角数値以外の場合は登録できない' do
-        @payment_profiles_shippings.phone_number = '090-1234-5678'  
+      it '電話番号が9桁以下では登録できない' do
+        @payment_profiles_shippings.phone_number = '12345678' 
+        @payment_profiles_shippings.valid?
+        expect(@payment_profiles_shippings.errors.full_messages).to include("Phone number is invalid")
+      end
+
+      it '電話番号が12桁以上では登録できない' do
+        @payment_profiles_shippings.phone_number = '123456789012'
+        @payment_profiles_shippings.valid?
+        expect(@payment_profiles_shippings.errors.full_messages).to include("Phone number is invalid")
+      end
+
+      it '電話番号は半角数字以外が含まれている場合は購入できない' do
+        @payment_profiles_shippings.phone_number = '090-1234567'  
         @payment_profiles_shippings.valid?
         expect(@payment_profiles_shippings.errors.full_messages).to include("Phone number is not a number")
       end
+
+      it 'tokenが空の場合は登録できない' do
+        @payment_profiles_shippings.token = nil  
+        @payment_profiles_shippings.valid?
+        expect(@payment_profiles_shippings.errors.full_messages).to include("Token can't be blank")
+      end
+
+      it 'userが紐付いていないと保存できないこと' do
+        @payment_profiles_shippings.user_id = nil  
+        @payment_profiles_shippings.valid?
+        expect(@payment_profiles_shippings.errors.full_messages).to include("User can't be blank")
+      end
+
+      it 'itemが紐付いていないと保存できないこと' do
+        @payment_profiles_shippings.item_id = nil  
+        @payment_profiles_shippings.valid?
+        expect(@payment_profiles_shippings.errors.full_messages).to include("Item can't be blank")
+      end
+
+
+
+      
     end
 
   end
