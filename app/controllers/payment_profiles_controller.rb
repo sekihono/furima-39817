@@ -1,7 +1,7 @@
 class PaymentProfilesController < ApplicationController
   before_action :authenticate_user!, only: [:index]
+  before_action :set_item, only: [:index, :create]
   before_action :move_to_index, only: [:index]
-  before_action :set_item, only: [:index, :create, :move_to_index]
 
 
   def index
@@ -36,15 +36,15 @@ class PaymentProfilesController < ApplicationController
     )
   end  
 
-  def move_to_index 
-    if current_user != @item.user || @item.sold_out?
-      # ユーザーが自身が出品した商品でない かつ　売却済み場合、トップページにリダイレクト
-          redirect_to root_path
-    end
-  end
-
   def set_item
     @item = Item.find(params[:item_id])
+  end
+
+  def move_to_index 
+    if current_user == @item.user || @item.sold_out?
+      # ユーザーが自身が出品した商品 または　売却済み場合、トップページにリダイレクト
+          redirect_to root_path
+    end
   end
 
 end
