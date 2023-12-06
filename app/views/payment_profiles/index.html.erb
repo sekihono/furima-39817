@@ -33,7 +33,7 @@
     </div>
     <%# /支払額の表示 %>
 
-    <%= form_with model: @payment_profiles_shippings, url: item_payment_profiles_path,id: 'charge-form', class: 'transaction-form-wrap',local: true do |f| %>
+    <%= form_with model: @payment_profiles_shippings, url: item_payment_profiles_path,data: { turbo: false },id: 'charge-form', class: 'transaction-form-wrap',local: true do |f| %>
     <% if @payment_profiles_shippings.present? %>
       <%= render 'shared/error_messages', model: @payment_profiles_shippings %>
     <% end %>
