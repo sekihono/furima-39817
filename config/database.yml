@@ -1,7 +1,27 @@
+default: &default
+  encoding: utf8
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+development:
+  <<: *default
+  adapter: mysql2
+  username: root
+  password:
+  host: localhost
+  database: furima_39817_development
+
+test:
+  <<: *default
+  adapter: mysql2
+  username: root
+  password:
+  host: localhost
+  database: furima_39817_test
+
 production:
   <<: *default
   adapter: mysql2
-  database: furima-39817_production
+  database: firima_39817_production
   username: root
   password: <%= ENV['DATABASE_PASSWORD'] %>
   socket: /var/lib/mysql/mysql.sock
